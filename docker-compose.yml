@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  # Конфигурация сервиса "server" (Python Django)
+  server:
+    container_name: server # Имя контейнера
+    build: ./server # Путь к Dockerfile для построения образа
+    ports:
+      - "$SERVER_PORT:$SERVER_PORT" # Проброс портов хоста на контейнер
+    command: bash -c "python manage.py runserver 0.0.0.0:$SERVER_PORT" # Команда запуска приложения
+    volumes:
+      - ./server:/app # Монтирование локальной директории внутрь контейнера
+    env_file:
+      - .env # Файл с переменными окружения
+
+  # Конфигурация сервиса "client" (ReactJS)
+  client:
+    container_name: client # Имя контейнера
+    build: ./client # Путь к Dockerfile для построения образа
+    ports:
+      - "$CLIENT_PORT:$CLIENT_PORT" # Проброс портов хоста на контейнер
+    volumes:
+      - ./client:/app # Монтирование локальной директории внутрь контейнера
+    environment:
+      - SERVER_API_URL=${SERVER_API_URL} # Переменная окружения для указания URL сервера API
