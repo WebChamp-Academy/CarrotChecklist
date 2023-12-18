@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.core.mail import send_mail
 from .models import User
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -6,8 +7,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'password', 'is_active', 'is_staff')
-        read_only_fields = ('id', 'is_active', 'is_staff')
+        fields = ('id', 'email', 'username', 'password', )
+        read_only_fields = ('id', )
 
     def create(self, validated_data):
         user = User.objects.create_user(
